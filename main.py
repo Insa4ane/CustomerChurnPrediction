@@ -1,6 +1,7 @@
 import pandas as pd
 from scripts.DataLoader import DataLoader
 from scripts.ModelAgent import ModelAgent
+import joblib
 
 
 
@@ -34,6 +35,8 @@ def main():
 
     score = agent.evaluate(y_test, predictions)
     print(f"\n(Accuracy)=={score * 100:.2f}%")
+    joblib.dump(agent, "models/model.joblib")
+    joblib.dump(list(x_train.columns), "columns/columns.joblib")
 
 if __name__ == "__main__":
     main()

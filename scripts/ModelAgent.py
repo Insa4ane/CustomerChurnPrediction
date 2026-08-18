@@ -1,3 +1,4 @@
+import joblib
 from sklearn.ensemble import  RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
@@ -17,6 +18,17 @@ class ModelAgent:
     def evaluate(self, y_test, predictions): #
         score=accuracy_score(y_test,predictions)
         return score
+
+    def save_model(self, agent):
+        try:
+            joblib.dump(agent, "models/model.joblib")
+            return "Model Saved"
+        except Exception as e:
+            return "we have a probelem with saving the model"
+
+
+
+
 
 
 
