@@ -4,7 +4,7 @@ from sklearn.metrics import accuracy_score
 
 class ModelAgent:
     def __init__(self):
-        self.model=RandomForestClassifier()
+        self.model=RandomForestClassifier(n_estimators=100,random_state=42, class_weight='balanced', max_depth=10)
 
 
     def predict(self, x_test):
