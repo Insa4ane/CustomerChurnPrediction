@@ -24,7 +24,7 @@ class DataLoader:
     def set_train_test_split(self): #testowe i treningowe zbiory
         x,y=self.split_data_x_y()
         x_train,x_test,y_train,y_test=sk.train_test_split(x,y,test_size=0.2)
-        return x_train,y_train,x_test,y_test
+        return x_train,x_test,y_train,y_test
 
 
 
