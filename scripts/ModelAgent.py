@@ -1,4 +1,5 @@
 import joblib
+import os
 from sklearn.ensemble import  RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
@@ -21,10 +22,11 @@ class ModelAgent:
 
     def save_model(self, agent):
         try:
+            os.makedirs("models", exist_ok=True)
             joblib.dump(agent, "models/model.joblib")
             return "Model Saved"
         except Exception as e:
-            return "we have a probelem with saving the model"
+            return f"Error: saving model: {e}"
 
 
 
