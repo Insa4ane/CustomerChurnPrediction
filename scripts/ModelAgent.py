@@ -2,6 +2,8 @@ import joblib
 import os
 from sklearn.ensemble import  RandomForestClassifier
 from sklearn.metrics import accuracy_score
+from pathlib import Path
+import pandas as pd
 
 
 class ModelAgent:
@@ -28,6 +30,20 @@ class ModelAgent:
         except Exception as e:
             return f"Error: saving model: {e}"
 
+
+    def run(self, loader, agent):
+        x_train, x_test, y_train, y_test = loader.set_train_test_split()
+        agent.train(x_train, y_train)
+        predictions = agent.predict(x_test)
+        score = agent.evaluate(y_test, predictions)
+        try:
+            os.makedirs("model", exist_ok=True)
+            joblib.dump(agent, "model/model.joblib")
+            os.makedirs("columns", exist_ok=True)
+            joblib.dump(list(x_train.columns), "columns/columns.joblib")
+            return score
+        except Exception as e:
+            return f"Error: saving model: {e}"
 
 
 

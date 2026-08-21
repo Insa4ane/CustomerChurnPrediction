@@ -2,11 +2,12 @@ import joblib
 import pandas as pd
 import sklearn.model_selection as sk
 import os
+from config.config import PATH
 
 
 class DataLoader:
-    def __init__(self, path):
-        self.path=path
+    def __init__(self):
+        self.path=PATH
 
     def load(self):
         df_tmp = pd.read_csv(self.path)
@@ -30,15 +31,6 @@ class DataLoader:
     def get_columns(self, x_train):
         return list(x_train.columns)
 
-    def save_columns(self, x_train):
-        columns=self.get_columns(x_train)
-        try:
-            os.makedirs("models", exist_ok=True) #os.mkdir -> we get an error when folder exist
-            joblib.dump(columns,"columns/columns.joblib")
-            return "Success Saved Columns"
-
-        except Exception as e:
-            return f"Error: saving columns: {e}"
 
 
 
