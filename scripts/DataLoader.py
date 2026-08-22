@@ -13,14 +13,13 @@ class DataLoader:
         df_tmp = pd.read_csv(self.path)
         df_tmp['TotalCharges'] = pd.to_numeric(df_tmp['TotalCharges'], errors='coerce')
         df_tmp = df_tmp.dropna()
-        df_tmp = df_tmp.drop(columns=['customerID'])
-        df = pd.get_dummies(df_tmp, drop_first=True, dtype=int)
+        df = df_tmp.drop(columns=['customerID'])
         return df
 
     def split_data_x_y(self): #split data and change for 0 and 1
         df=self.load()
-        x=df.drop(columns=['Churn_Yes'])
-        y=df['Churn_Yes']
+        x=df.drop(columns=['Churn'])
+        y=df['Churn']
         return x,y
 
     def set_train_test_split(self): #test and train sets

@@ -1,19 +1,22 @@
-import joblib
+import pandas as pd
+
 from scripts.DataLoader import DataLoader
 from scripts.ModelAgent import ModelAgent
 from pathlib import Path
 from frontend.frontend import Frontend
+from config.config import PATH
 
 def main():
     loader = DataLoader()
     agent = ModelAgent()
     path=Path("model/model.joblib")
     if not path.is_file():
-        agent.run(loader, agent)
-    #jesli tutaj doszlismy to znaczy ze mamy folder model oraz columns
-    columns=joblib.load("columns/columns.joblib")
-    column_list=list(columns) #dla upewnienia ze mamy liste
-    # frontend=Frontend(column_list)
+        agent.run(loader)
+    columns=pd.read_csv(PATH)
+    columns=columns.drop(columns=['customerID'])
+    columns=columns.drop(columns=['Churn'])
+    frontend=Frontend(columns) #tworzymy obiekt frontend
+    frontend.run()
 
 
 if __name__ == "__main__":
