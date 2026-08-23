@@ -11,6 +11,10 @@ This project features a machine learning model served by a fast, asynchronous AP
 * **Frontend UI:** Streamlit - an interactive web-based form for end users.
 * **DevOps:** Docker, Docker Compose - environment isolation and effortless deployment.
 
+## Dataset
+
+The dataset used to train the machine learning model was sourced from **Kaggle**. It is a standard customer churn dataset containing customer demographics, account information, and service usage details necessary for the prediction task.
+
 ## How to Run the Project
 
 Thanks to containerization, launching this application requires only one command. You only need to have **Docker Desktop** installed on your machine.
