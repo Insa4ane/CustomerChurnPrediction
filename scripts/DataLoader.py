@@ -1,7 +1,5 @@
-import joblib
 import pandas as pd
 import sklearn.model_selection as sk
-import os
 from config.config import PATH
 
 

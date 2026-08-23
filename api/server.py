@@ -1,8 +1,9 @@
 import joblib
 from fastapi import FastAPI
 import pandas as pd
+from config.config import MODEL
 app=FastAPI()
-PIPELINE_MODEL = joblib.load("model/model.joblib")
+PIPELINE_MODEL = joblib.load(MODEL)
 
 @app.get("/")
 def powitanie():
@@ -18,7 +19,7 @@ def predict_churn(data: dict):
     result = PIPELINE_MODEL.predict(df_input)
     return {
         "status": "sukces",
-        "result": int(result[0])
+        "result": str(result[0])
     }
 
 
