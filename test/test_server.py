@@ -29,7 +29,6 @@ def test_columns_endpoint(client):
 
 @patch('api.server.PIPELINE_MODEL')
 def test_predict_churn_success(mock_model, client):
-    # model returns a positive churn prediction (1)
     mock_model.predict.return_value = np.array([1])
 
     payload = {"age": 30, "tenure_months": 12, "plan": "premium"}
