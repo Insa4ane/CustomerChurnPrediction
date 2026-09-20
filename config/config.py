@@ -6,7 +6,7 @@ from sklearn.compose import make_column_selector as selector
 from sklearn.ensemble import RandomForestClassifier
 
 PATH="learing_set/WA_Fn-UseC_-Telco-Customer-Churn.csv"
-URL = "http://api:8000/predict"
+URL = "http://api:8000/predict_churn"
 
 #uzupelniamy brakujaca liczbe mediana
 NUMERIC_TRANSFORMER = SimpleImputer(strategy='median')

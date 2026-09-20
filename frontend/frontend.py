@@ -2,6 +2,7 @@ import streamlit as st
 import requests as rq
 from config.config import URL
 import pandas as pd
+import logging
 
 class Frontend:
     def __init__(self, columns):
@@ -24,29 +25,19 @@ class Frontend:
             create_form = st.form_submit_button(label="Send")
         return create_form, written_data
 
+    def send_data(self, create_from, written_data):
+       try:
+           if create_from:
+               if not written_data['MonthlyCharges'] and not written_data['TotalCharges']:
+                   st.warning("Musisz wypelnic totalCharges oraz MonthlyChargees")
+               respone=rq.post(URL, data=written_data)
+               return respone
+       except Exception as e:
+           logging.error(f"Wystapil blad{e}")
 
-    def run(self):
-        create_form, written_data=self.main_menu()
-        if create_form:
-            if  written_data['MonthlyCharges'] is not None and written_data['TotalCharges'] is not None:
-                api_adres=self.url
-                try:
-                    response=rq.post(api_adres, json=written_data) #wysylamy dane jesli damy rade
-                    if response.status_code == 200:
-                        response_data=response.json()
-                        prediction=response_data.get("result")
-                        st.subheader("Wynik predykcji:")
 
-                        if prediction == "Yes" or prediction == 1:
-                            st.error(f"Model przewiduje ze klient odejdzie, lepiej daj mu jakis kod rabatowy czy cos (Churn: {prediction})")
-                        else:
-                            st.success(f"Model przewiduje ze klient zostanie hurra!!! (Churn: {prediction})")
-                    else:
-                        st.warning(f"nie ma bledu ale nie ma odebnrania danych{response.status_code}")
-                except Exception as e:
-                    st.error(f"We have a problem with sent data {e}")
-            else:
-                st.warning("musisz wypelnic totalcharges oraz monthlycharges!!!")
+
+
 
 
 
