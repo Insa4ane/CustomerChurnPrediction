@@ -12,7 +12,7 @@ class PredictionResponse(BaseModel):
     status: str
     result: str
 
-@app.post("/predict", response_model=PredictionResponse)
+@app.post("/predict_churn", response_model=PredictionResponse)
 def predict_churn(data: dict):
     df_input = pd.DataFrame([data])
     try:

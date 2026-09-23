@@ -1,17 +1,31 @@
-version: '3.8'
-
 services:
+  train:
+    build: .
+    command: sh -c "if [ -f /app/model/model.joblib ] && [ -f /app/columns/columns_types.joblib ]; then echo 'Model already exists, skipping training'; else python -m train.train; fi"
+    volumes:
+      - model_data:/app/model
+      - columns_data:/app/columns
+
   api:
     build: .
     command: uvicorn api.server:app --host 0.0.0.0 --port 8000
+    depends_on:
+      train:
+        condition: service_completed_successfully
+    volumes:
+      - model_data:/app/model
+      - columns_data:/app/columns
     ports:
       - "8000:8000"
 
-
   frontend:
     build: .
-    command: streamlit run train.py --server.address=0.0.0.0
-    ports:
-      - "8501:8501"
+    command: streamlit run frontend/main_front.py --server.address=0.0.0.0
     depends_on:
       - api
+    ports:
+      - "8501:8501"
+
+volumes:
+  model_data:
+  columns_data:

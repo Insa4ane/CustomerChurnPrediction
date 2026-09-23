@@ -30,7 +30,7 @@ class Frontend:
            if create_from:
                if not written_data['MonthlyCharges'] and not written_data['TotalCharges']:
                    st.warning("Musisz wypelnic totalCharges oraz MonthlyChargees")
-               respone=rq.post(URL, data=written_data)
+               respone=rq.post(URL, json=written_data)
                return respone
        except Exception as e:
            logging.error(f"Wystapil blad{e}")
