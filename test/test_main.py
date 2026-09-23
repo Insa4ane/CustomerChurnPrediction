@@ -1,5 +1,5 @@
 from unittest.mock import patch, MagicMock
-from main import main
+from train.train import train_model as main
 
 
 @patch('main.Frontend')
@@ -18,9 +18,7 @@ def test_main_trains_model_when_file_missing(
     mock_agent = mock_agent_cls.return_value
     mock_joblib_load.return_value = {"age": "int64", "plan": "object"}
     mock_frontend = mock_frontend_cls.return_value
-
     main()
-
     mock_agent.run.assert_called_once_with(mock_loader)
     mock_joblib_load.assert_called_once()
     mock_frontend_cls.assert_called_once_with({"age": "int64", "plan": "object"})
