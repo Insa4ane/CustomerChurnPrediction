@@ -14,6 +14,7 @@ def train_model():
             agent.run(loader)
     except Exception as e:
         logging.error(e)
+        raise
 
 if __name__ == "__main__":
     train_model()

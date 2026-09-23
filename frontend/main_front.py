@@ -12,3 +12,7 @@ def main_menu():
         response=frontend.send_data(create_form, written_data)
         st.success(response)
 
+
+if __name__ == "__main__":
+    main_menu()
+
