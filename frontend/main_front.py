@@ -1,25 +1,14 @@
-import logging
-from pathlib import Path
-from scripts.DataLoader import DataLoader
-from scripts.ModelAgent import ModelAgent
-from config.config import MODEL
+import streamlit as st
+from config.config import COLUMNS_TYPES
+from frontend.frontend import Frontend
+import joblib
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+def main_menu():
+    st.title("Strona do przewidywania")
+    columns_with_types = joblib.load(COLUMNS_TYPES)
+    frontend = Frontend(columns_with_types)
+    create_form, written_data=frontend.main_menu()
+    if create_form and written_data:
+        response=frontend.send_data(create_form, written_data)
+        st.success(response)
 
-def train_model():
-    try:
-        path = Path(MODEL)
-        if not path.is_file():
-            logging.info("Training")
-            loader = DataLoader()
-            agent = ModelAgent()
-            agent.run(loader)
-            logging.info("Training has been finished.")
-        else:
-            logging.info(f"Model is existed")
-
-    except Exception as e:
-        logging.exception(f"Error! We cannot load/train model{e}")
-
-if __name__ == "__main__":
-    train_model()
