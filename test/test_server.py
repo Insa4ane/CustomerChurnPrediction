@@ -10,8 +10,9 @@ def client():
     return TestClient(app)
 
 
-@patch('api.server.PIPELINE_MODEL')
-def test_predict_churn_success(mock_model, client):
+@patch('api.server.get_model')
+def test_predict_churn_success(mock_get_model, client):
+    mock_model = mock_get_model.return_value
     mock_model.predict.return_value = np.array([1])
 
     payload = {"age": 30, "tenure_months": 12, "plan": "premium"}
@@ -27,9 +28,9 @@ def test_predict_churn_success(mock_model, client):
     assert called_df.iloc[0]["plan"] == "premium"
 
 
-@patch('api.server.PIPELINE_MODEL')
-def test_predict_churn_returns_zero(mock_model, client):
-    mock_model.predict.return_value = np.array([0])
+@patch('api.server.get_model')
+def test_predict_churn_returns_zero(mock_get_model, client):
+    mock_get_model.return_value.predict.return_value = np.array([0])
 
     response = client.post("/predict_churn", json={"age": 45})
 
@@ -37,11 +38,33 @@ def test_predict_churn_returns_zero(mock_model, client):
     assert response.json()["result"] == "0"
 
 
-@patch('api.server.PIPELINE_MODEL')
-def test_predict_churn_model_error(mock_model, client):
-    mock_model.predict.side_effect = ValueError("bad input data")
+@patch('api.server.get_model')
+def test_predict_churn_model_error(mock_get_model, client):
+    mock_get_model.return_value.predict.side_effect = ValueError("bad input data")
 
     response = client.post("/predict_churn", json={"foo": "bar"})
 
     assert response.status_code == 400
     assert "bad input data" in response.json()["detail"]
+
+
+@patch('api.server.get_model')
+def test_predict_churn_model_not_trained_yet(mock_get_model, client):
+    mock_get_model.side_effect = FileNotFoundError()
+
+    response = client.post("/predict_churn", json={"age": 45})
+
+    assert response.status_code == 503
+
+
+@patch('api.server.get_model')
+def test_health_ok(mock_get_model, client):
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.json()["status"] == "ok"
+
+
+@patch('api.server.get_model', side_effect=FileNotFoundError())
+def test_health_model_missing(mock_get_model, client):
+    response = client.get("/health")
+    assert response.status_code == 503

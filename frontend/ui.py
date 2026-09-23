@@ -28,7 +28,7 @@ class Frontend:
     def send_data(self, create_from, written_data):
        try:
            if create_from:
-               if not written_data['MonthlyCharges'] and not written_data['TotalCharges']:
+               if not written_data['MonthlyCharges'] or not written_data['TotalCharges']:
                    st.warning("Musisz wypelnic totalCharges oraz MonthlyChargees")
                    return []
                respone=rq.post(URL, json=written_data)
